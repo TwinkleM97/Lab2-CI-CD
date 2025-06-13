@@ -8,38 +8,39 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Setup Virtual Environment') {
             steps {
-                bat 'python -m pip install flask'
-                bat 'python -m pip install pytest'
+                bat 'python -m venv venv'
+                bat 'venv\\Scripts\\pip.exe install --upgrade pip'
+                bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
             }
         }
 
         stage('Build') {
             steps {
-                bat 'python -c "import flask; print(\'Flask OK\')"'
+                bat 'venv\\Scripts\\python.exe -c "import flask; print(\'Flask OK\')"'
             }
         }
 
         stage('Test') {
             steps {
-                bat 'python -m py_compile app.py'
+                bat 'venv\\Scripts\\python.exe -m py_compile app.py'
             }
         }
 
         stage('Notify') {
             steps {
-                echo 'Build completed successfully!'
+                echo '✅ CI/CD pipeline completed!'
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline completed!'
+            echo '🔁 Pipeline finished'
         }
         failure {
-            echo ' Pipeline failed!'
+            echo '❌ Pipeline failed'
         }
     }
 }
