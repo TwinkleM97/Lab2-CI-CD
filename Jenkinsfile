@@ -9,23 +9,23 @@ pipeline {
         }
 
         stage('Install Dependencies') {
-            steps {
-                bat '"C:\\Users\\Twinkle\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -m pip install flask'
-                bat '"C:\\Users\\Twinkle\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -m pip install pytest'
-            }
-        }
+    steps {
+        bat '"C:\\Users\\twink\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -m pip install flask'
+        bat '"C:\\Users\\twink\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -m pip install pytest'
+    }
+}
 
-        stage('Build') {
-            steps {
-                bat '"C:\\Users\\Twinkle\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -c "import flask; print(\'Flask OK\')"'
-            }
-        }
+stage('Build') {
+    steps {
+        bat '"C:\\Users\\twink\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -c "import flask; print(\'Flask OK\')"'
+    }
+}
 
-        stage('Test') {
-            steps {
-                bat '"C:\\Users\\Twinkle\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -m py_compile app.py'
-            }
-        }
+stage('Test') {
+    steps {
+        bat '"C:\\Users\\twink\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -m py_compile app.py'
+    }
+}
 
         stage('Notify') {
             steps {
