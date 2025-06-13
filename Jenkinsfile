@@ -1,46 +1,49 @@
 pipeline {
     agent any
-
+    
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/TwinkleM97/Lab2-CI-CD.git'
             }
         }
-
-        stage('Setup Virtual Environment') {
+        
+        stage('Install Dependencies') {
             steps {
-                bat 'python -m venv venv'
-                bat 'venv\\Scripts\\pip.exe install --upgrade pip'
-                bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
+                // Use PowerShell instead of batch
+                powershell 'python -m pip install flask pytest'
             }
         }
-
+        
         stage('Build') {
             steps {
-                bat 'venv\\Scripts\\python.exe -c "import flask; print(\'Flask OK\')"'
+                echo 'Building Flask application...'
+                powershell 'python -c "import flask; print(\'Flask imported successfully\')"'
             }
         }
-
+        
         stage('Test') {
             steps {
-                bat 'venv\\Scripts\\python.exe -m py_compile app.py'
+                echo 'Running tests...'
+                powershell 'python -m py_compile app.py'
+                powershell 'python -c "from app import app; print(\'App imported successfully\')"'
+                echo 'Basic tests passed!'
             }
         }
-
+        
         stage('Notify') {
             steps {
-                echo '✅ CI/CD pipeline completed!'
+                echo 'Build completed successfully!'
             }
         }
     }
-
+    
     post {
-        always {
-            echo '🔁 Pipeline finished'
+        success {
+            echo 'Pipeline succeeded!'
         }
         failure {
-            echo '❌ Pipeline failed'
+            echo 'Pipeline failed!'
         }
     }
 }
