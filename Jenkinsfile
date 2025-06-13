@@ -17,7 +17,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Flask app...'
-                bat 'call venv\\Scripts\\activate.bat && python -c "import flask; print(\'Flask imported\')"'
+                bat 'call venv\\Scripts\\activate.bat && python -c "import flask; print(\'Flask OK\')"'
             }
         }
 
@@ -31,17 +31,17 @@ pipeline {
 
         stage('Notify') {
             steps {
-                echo 'All stages ran. Notification step done.'
+                echo 'All done!'
             }
         }
     }
 
     post {
         success {
-            echo '✅ Pipeline succeeded!'
+            echo '✅ Build succeeded'
         }
         failure {
-            echo '❌ Pipeline failed!'
+            echo '❌ Build failed'
         }
     }
 }
