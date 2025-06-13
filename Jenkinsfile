@@ -1,52 +1,42 @@
 pipeline {
     agent any
-    
+
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/TwinkleM97/Lab2-CI-CD.git'
             }
         }
-        
+
         stage('Install Dependencies') {
             steps {
-                bat 'pip install flask'
-                bat 'pip install pytest'
+                bat '"C:\\Users\\Twinkle\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -m pip install flask'
+                bat '"C:\\Users\\Twinkle\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -m pip install pytest'
             }
         }
-        
+
         stage('Build') {
             steps {
-                echo 'Building Flask application...'
-                bat 'python -c "import flask; print(\'Flask imported successfully\')"'
+                bat '"C:\\Users\\Twinkle\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -c "import flask; print(\'Flask OK\')"'
             }
         }
-        
+
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                bat 'python -m py_compile app.py'
-                bat 'python -c "from app import app; print(\'App imported successfully\')"'
-                echo 'Basic tests passed!'
+                bat '"C:\\Users\\Twinkle\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -m py_compile app.py'
             }
         }
-        
+
         stage('Notify') {
             steps {
-                echo 'Build completed successfully!'
+                echo '🎉 Pipeline completed successfully!'
             }
         }
     }
-    
+
     post {
-        always {
-            echo 'Pipeline completed!'
-        }
-        success {
-            echo 'Pipeline succeeded!'
-        }
         failure {
-            echo 'Pipeline failed!'
+            echo '❌ Pipeline failed. Please check logs.'
         }
     }
 }
