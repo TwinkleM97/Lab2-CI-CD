@@ -10,77 +10,37 @@ pipeline {
         
         stage('Install Dependencies') {
             steps {
-                script {
-                    if (isUnix()) {
-                        sh '''
-                            python3 -m venv venv
-                            . venv/bin/activate
-                            pip install -r requirements.txt
-                        '''
-                    } else {
-                        bat 'python -m venv venv'
-                        bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
-                    }
-                }
+                bat 'pip install flask'
+                bat 'pip install pytest'
             }
         }
         
         stage('Build') {
             steps {
                 echo 'Building Flask application...'
-                script {
-                    if (isUnix()) {
-                        sh '''
-                            . venv/bin/activate
-                            python -c "from app import app; print('Flask app imported successfully')"
-                        '''
-                    } else {
-                        bat 'venv\\Scripts\\python.exe -c "from app import app; print(\'Flask app imported successfully\')"'
-                    }
-                }
+                bat 'python -c "import flask; print(\'Flask imported successfully\')"'
             }
         }
         
         stage('Test') {
             steps {
                 echo 'Running tests...'
-                script {
-                    if (isUnix()) {
-                        sh '''
-                            . venv/bin/activate
-                            python -m pytest --version || echo "pytest not installed, running basic syntax check"
-                            python -m py_compile app.py
-                            echo "Basic syntax check passed"
-                        '''
-                    } else {
-                        bat 'venv\\Scripts\\python.exe -m py_compile app.py'
-                        bat 'echo "Basic syntax check passed"'
-                    }
-                }
+                bat 'python -m py_compile app.py'
+                bat 'python -c "from app import app; print(\'App imported successfully\')"'
+                echo 'Basic tests passed!'
             }
         }
         
         stage('Notify') {
             steps {
-                echo 'Build completed successfully! Notification sent.'
-                script {
-                    // You can add email notification here if configured
-                    echo "Pipeline completed at: ${new Date()}"
-                }
+                echo 'Build completed successfully!'
             }
         }
     }
     
     post {
         always {
-            echo 'Cleaning up...'
-            script {
-                if (isUnix()) {
-                    sh 'rm -rf venv || true'
-                } else {
-                    bat 'if exist venv rmdir /s /q venv'
-                }
-            }
+            echo 'Pipeline completed!'
         }
         success {
             echo 'Pipeline succeeded!'
