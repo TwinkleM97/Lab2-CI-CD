@@ -18,11 +18,8 @@ pipeline {
                             pip install -r requirements.txt
                         '''
                     } else {
-                        bat '''
-                            python -m venv venv
-                            call venv\\Scripts\\activate.bat
-                            pip install -r requirements.txt
-                        '''
+                        bat 'python -m venv venv'
+                        bat 'venv\\Scripts\\pip.exe install -r requirements.txt'
                     }
                 }
             }
@@ -38,10 +35,7 @@ pipeline {
                             python -c "from app import app; print('Flask app imported successfully')"
                         '''
                     } else {
-                        bat '''
-                            call venv\\Scripts\\activate.bat
-                            python -c "from app import app; print('Flask app imported successfully')"
-                        '''
+                        bat 'venv\\Scripts\\python.exe -c "from app import app; print(\'Flask app imported successfully\')"'
                     }
                 }
             }
@@ -59,12 +53,8 @@ pipeline {
                             echo "Basic syntax check passed"
                         '''
                     } else {
-                        bat '''
-                            call venv\\Scripts\\activate.bat
-                            python -m pytest --version || echo "pytest not installed, running basic syntax check"
-                            python -m py_compile app.py
-                            echo "Basic syntax check passed"
-                        '''
+                        bat 'venv\\Scripts\\python.exe -m py_compile app.py'
+                        bat 'echo "Basic syntax check passed"'
                     }
                 }
             }
@@ -88,7 +78,7 @@ pipeline {
                 if (isUnix()) {
                     sh 'rm -rf venv || true'
                 } else {
-                    bat 'if exist venv rmdir /s /q venv || echo "No venv to clean"'
+                    bat 'if exist venv rmdir /s /q venv'
                 }
             }
         }
