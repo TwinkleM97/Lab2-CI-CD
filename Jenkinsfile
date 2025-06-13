@@ -8,44 +8,29 @@ pipeline {
             }
         }
 
-        stage('Setup Virtual Env') {
-            steps {
-                bat 'python -m venv venv'
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
-                bat '''
-                call venv\\Scripts\\activate.bat
-                python -m ensurepip --upgrade
-                python -m pip install --upgrade pip
-                pip install -r requirements.txt
-                '''
+                bat 'C:\\Users\\twink\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m pip install -r requirements.txt'
             }
         }
 
         stage('Build') {
             steps {
-                bat '''
-                call venv\\Scripts\\activate.bat
-                python -c "import flask; print('Flask OK')"
-                '''
+                echo 'Building Flask application...'
+                bat 'C:\\Users\\twink\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -c "import flask; print(\'Flask OK\')"'
             }
         }
 
         stage('Test') {
             steps {
-                bat '''
-                call venv\\Scripts\\activate.bat
-                pytest test_app.py
-                '''
+                echo 'Running tests...'
+                bat 'C:\\Users\\twink\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -m pytest test_app.py'
             }
         }
 
         stage('Notify') {
             steps {
-                echo 'All stages completed!'
+                echo 'Build completed successfully!'
             }
         }
     }
