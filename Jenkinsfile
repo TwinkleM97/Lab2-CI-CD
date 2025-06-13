@@ -1,6 +1,6 @@
 pipeline {
     agent any
-
+    
     stages {
         stage('Checkout') {
             steps {
@@ -10,38 +10,38 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                bat 'setup.bat'
+                bat 'venv\\Scripts\\python.exe -m pip install --upgrade pip'
+                bat 'venv\\Scripts\\python.exe -m pip install -r requirements.txt'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building Flask app...'
-                bat 'call venv\\Scripts\\activate.bat && python -c "import flask; print(\'Flask OK\')"'
+                echo 'Building Flask application...'
+                bat 'venv\\Scripts\\python.exe -c "import flask; print(\'Flask OK\')"'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                bat 'call venv\\Scripts\\activate.bat && python -m py_compile app.py'
-                bat 'call venv\\Scripts\\activate.bat && python -c "from app import app; print(\'App imported\')"'
+                echo 'Running unit tests...'
+                bat 'venv\\Scripts\\python.exe -m pytest test_app.py'
             }
         }
 
         stage('Notify') {
             steps {
-                echo 'All done!'
+                echo 'Build and test completed!'
             }
         }
     }
 
     post {
         success {
-            echo '✅ Build succeeded'
+            echo 'Pipeline succeeded!'
         }
         failure {
-            echo '❌ Build failed'
+            echo 'Pipeline failed!'
         }
     }
 }
