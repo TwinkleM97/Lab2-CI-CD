@@ -10,8 +10,10 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'python -m venv venv'
-                sh '. venv/bin/activate && pip install -r requirements.txt'
+                bat '''
+                python -m venv venv
+                venv\\Scripts\\activate.bat && pip install -r requirements.txt
+                '''
             }
         }
 
@@ -24,7 +26,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running basic tests...'
-                sh 'echo "No unit tests implemented yet."'
+                bat 'echo No unit tests implemented yet.'
             }
         }
 
